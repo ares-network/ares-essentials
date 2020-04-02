@@ -1,6 +1,7 @@
 package com.llewkcor.ares.essentials;
 
 import co.aikar.commands.PaperCommandManager;
+import com.llewkcor.ares.essentials.command.ChatCommand;
 import com.llewkcor.ares.essentials.command.ItemCommand;
 import com.llewkcor.ares.essentials.command.PlayerCommand;
 import lombok.Getter;
@@ -21,6 +22,7 @@ public final class Essentials extends JavaPlugin {
         commandManager.enableUnstableAPI("help");
         commandManager.registerCommand(new ItemCommand(this));
         commandManager.registerCommand(new PlayerCommand(this));
+        commandManager.registerCommand(new ChatCommand(this));
     }
 
     @Override
