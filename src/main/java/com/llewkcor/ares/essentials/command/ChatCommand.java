@@ -1,10 +1,8 @@
 package com.llewkcor.ares.essentials.command;
 
 import co.aikar.commands.BaseCommand;
-import co.aikar.commands.annotation.CommandAlias;
-import co.aikar.commands.annotation.CommandPermission;
-import co.aikar.commands.annotation.Description;
-import co.aikar.commands.annotation.Syntax;
+import co.aikar.commands.CommandHelp;
+import co.aikar.commands.annotation.*;
 import com.llewkcor.ares.essentials.Essentials;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,5 +32,11 @@ public final class ChatCommand extends BaseCommand {
         }
 
         Bukkit.broadcastMessage(" ");
+    }
+
+    @HelpCommand
+    public void onHelp(CommandSender sender, CommandHelp help) {
+        help.showHelp();
+        sender.sendMessage(ChatColor.YELLOW + "Type " + ChatColor.GOLD + "/" + help.getCommandName() + " help " + (help.getPage() + 1) + ChatColor.YELLOW + " to see the next page");
     }
 }

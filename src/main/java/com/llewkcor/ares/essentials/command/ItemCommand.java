@@ -1,6 +1,7 @@
 package com.llewkcor.ares.essentials.command;
 
 import co.aikar.commands.BaseCommand;
+import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.*;
 import com.llewkcor.ares.commons.item.ItemBuilder;
 import com.llewkcor.ares.commons.logger.Logger;
@@ -11,6 +12,7 @@ import lombok.Getter;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -172,5 +174,11 @@ public final class ItemCommand extends BaseCommand {
         player.getInventory().addItem(item);
         player.sendMessage(Essentials.PRIMARY + "Added " + Essentials.SECONDARY + "x" + item.getAmount() + " " + StringUtils.capitalize(item.getType().name().toLowerCase().replace("_", " ")) + Essentials.PRIMARY + " to your inventory");
         Logger.print(player.getName() + "(" + player.getUniqueId().toString() + ") gave themselves " + item.getAmount() + " " + item.getType().name());
+    }
+
+    @HelpCommand
+    public void onHelp(CommandSender sender, CommandHelp help) {
+        help.showHelp();
+        sender.sendMessage(ChatColor.YELLOW + "Type " + ChatColor.GOLD + "/" + help.getCommandName() + " help " + (help.getPage() + 1) + ChatColor.YELLOW + " to see the next page");
     }
 }

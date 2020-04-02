@@ -1,6 +1,7 @@
 package com.llewkcor.ares.essentials.command;
 
 import co.aikar.commands.BaseCommand;
+import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.*;
 import com.llewkcor.ares.commons.logger.Logger;
 import com.llewkcor.ares.essentials.Essentials;
@@ -144,5 +145,11 @@ public final class PlayerCommand extends BaseCommand {
         player.sendMessage(Essentials.PRIMARY + "Your gamemode has been changed to " + Essentials.SECONDARY + StringUtils.capitalize(gamemode.name().toLowerCase()));
 
         Logger.print(sender.getName() + " changed " + player.getName() + "'s gamemode to " + gamemode.name());
+    }
+
+    @HelpCommand
+    public void onHelp(CommandSender sender, CommandHelp help) {
+        help.showHelp();
+        sender.sendMessage(ChatColor.YELLOW + "Type " + ChatColor.GOLD + "/" + help.getCommandName() + " help " + (help.getPage() + 1) + ChatColor.YELLOW + " to see the next page");
     }
 }
