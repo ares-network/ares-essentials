@@ -1,9 +1,8 @@
 package com.llewkcor.ares.essentials;
 
 import co.aikar.commands.PaperCommandManager;
-import com.llewkcor.ares.essentials.command.ChatCommand;
-import com.llewkcor.ares.essentials.command.ItemCommand;
-import com.llewkcor.ares.essentials.command.PlayerCommand;
+import com.llewkcor.ares.essentials.command.*;
+import com.llewkcor.ares.essentials.warp.WarpManager;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -14,15 +13,22 @@ public final class Essentials extends JavaPlugin {
     public static final ChatColor SPECIAL = ChatColor.RED;
 
     @Getter protected PaperCommandManager commandManager;
+    @Getter protected WarpManager warpManager;
 
     @Override
     public void onEnable() {
         this.commandManager = new PaperCommandManager(this);
+        this.warpManager = new WarpManager(this);
 
         commandManager.enableUnstableAPI("help");
+
         commandManager.registerCommand(new ItemCommand(this));
         commandManager.registerCommand(new PlayerCommand(this));
         commandManager.registerCommand(new ChatCommand(this));
+        commandManager.registerCommand(new WarpCommand(this));
+        commandManager.registerCommand(new TeleportCommand(this));
+
+        warpManager.getHandler().load();
     }
 
     @Override
