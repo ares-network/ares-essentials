@@ -3,11 +3,14 @@ package com.llewkcor.ares.essentials;
 import co.aikar.commands.PaperCommandManager;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
+import com.llewkcor.ares.core.Ares;
 import com.llewkcor.ares.essentials.command.*;
+import com.llewkcor.ares.essentials.punishment.PunishmentManager;
 import com.llewkcor.ares.essentials.support.SupportManager;
 import com.llewkcor.ares.essentials.vanish.VanishManager;
 import com.llewkcor.ares.essentials.warp.WarpManager;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -16,21 +19,25 @@ public final class Essentials extends JavaPlugin {
     public static final ChatColor SECONDARY = ChatColor.YELLOW;
     public static final ChatColor SPECIAL = ChatColor.RED;
 
+    @Getter protected Ares core;
     @Getter protected ProtocolManager protocolManager;
 
     @Getter protected PaperCommandManager commandManager;
     @Getter protected WarpManager warpManager;
     @Getter protected VanishManager vanishManager;
     @Getter protected SupportManager supportManager;
+    @Getter protected PunishmentManager punishmentManager;
 
     @Override
     public void onEnable() {
+        this.core = (Ares) Bukkit.getPluginManager().getPlugin("ares-core");
         this.protocolManager = ProtocolLibrary.getProtocolManager();
 
         this.commandManager = new PaperCommandManager(this);
         this.warpManager = new WarpManager(this);
         this.vanishManager = new VanishManager(this);
         this.supportManager = new SupportManager(this);
+        this.punishmentManager = new PunishmentManager(this);
 
         commandManager.enableUnstableAPI("help");
 
@@ -43,6 +50,7 @@ public final class Essentials extends JavaPlugin {
         commandManager.registerCommand(new MiscCommand(this));
         commandManager.registerCommand(new InfoCommand(this));
         commandManager.registerCommand(new SupportCommand(this));
+        commandManager.registerCommand(new PunishmentCommand(this));
 
         warpManager.getHandler().load();
     }
