@@ -1,6 +1,7 @@
 package com.llewkcor.ares.essentials.command;
 
 import co.aikar.commands.BaseCommand;
+import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.*;
 import com.llewkcor.ares.commons.promise.SimplePromise;
 import com.llewkcor.ares.essentials.Essentials;
@@ -8,10 +9,27 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 @AllArgsConstructor
 public final class PunishmentCommand extends BaseCommand {
     @Getter public final Essentials plugin;
+
+    @CommandAlias("lookup")
+    @Description("Lookup a players information")
+    @CommandPermission("essentials.punishment.lookup")
+    @Syntax("<username>")
+    public void onLookup(Player player, String username) {
+        plugin.getPunishmentManager().getHandler().lookup(player, username, new SimplePromise() {
+            @Override
+            public void success() {}
+
+            @Override
+            public void fail(String s) {
+                player.sendMessage(ChatColor.RED + s);
+            }
+        });
+    }
 
     @CommandAlias("unban")
     @Description("Unban a player")
@@ -171,5 +189,11 @@ public final class PunishmentCommand extends BaseCommand {
                 sender.sendMessage(ChatColor.RED + s);
             }
         });
+    }
+
+    @HelpCommand
+    public void onHelp(CommandSender sender, CommandHelp help) {
+        help.showHelp();
+        sender.sendMessage(ChatColor.YELLOW + "Type " + ChatColor.GOLD + "/" + help.getCommandName() + " help " + (help.getPage() + 1) + ChatColor.YELLOW + " to see the next page");
     }
 }

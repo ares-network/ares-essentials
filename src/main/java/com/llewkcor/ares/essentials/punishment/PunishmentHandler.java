@@ -1,14 +1,19 @@
 package com.llewkcor.ares.essentials.punishment;
 
+import com.google.common.collect.ImmutableCollection;
 import com.llewkcor.ares.commons.logger.Logger;
 import com.llewkcor.ares.commons.promise.FailablePromise;
+import com.llewkcor.ares.commons.promise.Promise;
 import com.llewkcor.ares.commons.promise.SimplePromise;
 import com.llewkcor.ares.commons.util.bukkit.Scheduler;
 import com.llewkcor.ares.commons.util.general.Time;
+import com.llewkcor.ares.core.alts.data.AltEntry;
 import com.llewkcor.ares.core.bridge.data.account.AresAccount;
 import com.llewkcor.ares.essentials.punishment.data.Punishment;
 import com.llewkcor.ares.essentials.punishment.data.PunishmentDAO;
 import com.llewkcor.ares.essentials.punishment.data.PunishmentType;
+import com.llewkcor.ares.essentials.punishment.menu.PlayerLookupMenu;
+import com.mongodb.client.model.Filters;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -23,6 +28,40 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public final class PunishmentHandler {
     @Getter public final PunishmentManager manager;
+
+    /**
+     * Handles opening lookup GUI for provided username
+     * @param player Player
+     * @param username Username
+     * @param promise Promise
+     */
+    public void lookup(Player player, String username, SimplePromise promise) {
+        manager.getPlugin().getCore().getBridgeManager().getDataManager().getAccountByUsername(username, new FailablePromise<AresAccount>() {
+            @Override
+            public void success(AresAccount aresAccount) {
+                if (aresAccount == null) {
+                    promise.fail("Player not found");
+                    return;
+                }
+
+                new Scheduler(manager.getPlugin()).async(() -> {
+                    final Collection<Punishment> activePunishments = PunishmentDAO.getPunishments(manager.getPlugin().getCore().getDatabaseInstance(),
+                            Filters.or(Filters.eq("punished_id", aresAccount.getBukkitId()), Filters.eq("punished_address", aresAccount.getAddress())),
+                            Filters.eq("punished_id", aresAccount.getBukkitId()));
+
+                    new Scheduler(manager.getPlugin()).sync(() -> manager.getPlugin().getCore().getAltManager().getAlts(aresAccount.getUniqueId(), aresAccount.getAddress(), altEntries -> {
+                        final PlayerLookupMenu menu = new PlayerLookupMenu(manager.getPlugin(), player, aresAccount, activePunishments, altEntries);
+                        menu.open();
+                    })).run();
+                }).run();
+            }
+
+            @Override
+            public void fail(String s) {
+                promise.fail(s);
+            }
+        });
+    }
 
     /**
      * Handles creating a new temp mute
