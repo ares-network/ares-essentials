@@ -18,6 +18,9 @@ import java.util.List;
 public final class WarpHandler {
     @Getter public final WarpManager manager;
 
+    /**
+     * Handles loading all warps from file to memory
+     */
     public void load() {
         final YamlConfiguration config = Configs.getConfig(manager.getPlugin(), "warps");
 
@@ -41,6 +44,9 @@ public final class WarpHandler {
         Logger.print("Loaded " + manager.getWarps().size() + " Warps");
     }
 
+    /**
+     * Handles saving the warps file
+     */
     public void save() {
         final YamlConfiguration config = Configs.getConfig(manager.getPlugin(), "warps");
 
@@ -57,6 +63,12 @@ public final class WarpHandler {
         Logger.print("Saved " + manager.getWarps().size() + " Warps");
     }
 
+    /**
+     * Handles creating a warp
+     * @param player Player
+     * @param name Warp Name
+     * @param promise Promise
+     */
     public void create(Player player, String name, SimplePromise promise) {
         final Warp existing = manager.getWarp(name);
 
@@ -75,6 +87,11 @@ public final class WarpHandler {
         promise.success();
     }
 
+    /**
+     * Handles deleting a warp
+     * @param name Warp name
+     * @param promise Promise
+     */
     public void delete(String name, SimplePromise promise) {
         final Warp warp = manager.getWarp(name);
 
@@ -91,6 +108,10 @@ public final class WarpHandler {
         promise.success();
     }
 
+    /**
+     * Handles printing a list of all available warps
+     * @param player Player
+     */
     public void list(Player player) {
         final List<String> names = Lists.newArrayList();
         manager.getWarps().forEach(warp -> names.add(warp.getName()));
