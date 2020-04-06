@@ -1,14 +1,11 @@
 package com.llewkcor.ares.essentials.punishment;
 
-import com.google.common.collect.ImmutableCollection;
 import com.llewkcor.ares.commons.logger.Logger;
 import com.llewkcor.ares.commons.promise.FailablePromise;
-import com.llewkcor.ares.commons.promise.Promise;
 import com.llewkcor.ares.commons.promise.SimplePromise;
 import com.llewkcor.ares.commons.util.bukkit.Scheduler;
 import com.llewkcor.ares.commons.util.general.Time;
-import com.llewkcor.ares.core.alts.data.AltEntry;
-import com.llewkcor.ares.core.bridge.data.account.AresAccount;
+import com.llewkcor.ares.core.player.data.account.AresAccount;
 import com.llewkcor.ares.essentials.punishment.data.Punishment;
 import com.llewkcor.ares.essentials.punishment.data.PunishmentDAO;
 import com.llewkcor.ares.essentials.punishment.data.PunishmentType;
@@ -36,7 +33,7 @@ public final class PunishmentHandler {
      * @param promise Promise
      */
     public void lookup(Player player, String username, SimplePromise promise) {
-        manager.getPlugin().getCore().getBridgeManager().getDataManager().getAccountByUsername(username, new FailablePromise<AresAccount>() {
+        manager.getPlugin().getCore().getPlayerManager().getAccountByUsername(username, new FailablePromise<AresAccount>() {
             @Override
             public void success(AresAccount aresAccount) {
                 if (aresAccount == null) {
@@ -82,7 +79,7 @@ public final class PunishmentHandler {
             return;
         }
 
-        manager.getPlugin().getCore().getBridgeManager().getDataManager().getAccountByUsername(username, new FailablePromise<AresAccount>() {
+        manager.getPlugin().getCore().getPlayerManager().getAccountByUsername(username, new FailablePromise<AresAccount>() {
             @Override
             public void success(AresAccount aresAccount) {
                 if (aresAccount == null) {
@@ -120,7 +117,7 @@ public final class PunishmentHandler {
     public void mute(CommandSender sender, String username, String reason, SimplePromise promise) {
         final UUID creatorId = (sender instanceof Player) ? ((Player)sender).getUniqueId() : null;
 
-        manager.getPlugin().getCore().getBridgeManager().getDataManager().getAccountByUsername(username, new FailablePromise<AresAccount>() {
+        manager.getPlugin().getCore().getPlayerManager().getAccountByUsername(username, new FailablePromise<AresAccount>() {
             @Override
             public void success(AresAccount aresAccount) {
                 if (aresAccount == null) {
@@ -184,7 +181,7 @@ public final class PunishmentHandler {
      * @param promise Promise
      */
     public void unmute(CommandSender sender, String username, SimplePromise promise) {
-        manager.getPlugin().getCore().getBridgeManager().getDataManager().getAccountByUsername(username, new FailablePromise<AresAccount>() {
+        manager.getPlugin().getCore().getPlayerManager().getAccountByUsername(username, new FailablePromise<AresAccount>() {
             @Override
             public void success(AresAccount aresAccount) {
                 if (aresAccount == null) {
@@ -232,7 +229,7 @@ public final class PunishmentHandler {
      * @param promise Promise
      */
     public void unban(CommandSender sender, String username, SimplePromise promise) {
-        manager.getPlugin().getCore().getBridgeManager().getDataManager().getAccountByUsername(username, new FailablePromise<AresAccount>() {
+        manager.getPlugin().getCore().getPlayerManager().getAccountByUsername(username, new FailablePromise<AresAccount>() {
             @Override
             public void success(AresAccount aresAccount) {
                 if (aresAccount == null) {
@@ -280,7 +277,7 @@ public final class PunishmentHandler {
      * @param promise Promise
      */
     public void unblacklist(CommandSender sender, String username, SimplePromise promise) {
-        manager.getPlugin().getCore().getBridgeManager().getDataManager().getAccountByUsername(username, new FailablePromise<AresAccount>() {
+        manager.getPlugin().getCore().getPlayerManager().getAccountByUsername(username, new FailablePromise<AresAccount>() {
             @Override
             public void success(AresAccount aresAccount) {
                 if (aresAccount == null) {
@@ -331,7 +328,7 @@ public final class PunishmentHandler {
     public void createBan(CommandSender sender, String username, String reason, SimplePromise promise) {
         final UUID creatorId = (sender instanceof Player) ? ((Player)sender).getUniqueId() : null;
 
-        manager.getPlugin().getCore().getBridgeManager().getDataManager().getAccountByUsername(username, new FailablePromise<AresAccount>() {
+        manager.getPlugin().getCore().getPlayerManager().getAccountByUsername(username, new FailablePromise<AresAccount>() {
             @Override
             public void success(AresAccount aresAccount) {
                 if (aresAccount == null) {
@@ -378,7 +375,7 @@ public final class PunishmentHandler {
             return;
         }
 
-        manager.getPlugin().getCore().getBridgeManager().getDataManager().getAccountByUsername(username, new FailablePromise<AresAccount>() {
+        manager.getPlugin().getCore().getPlayerManager().getAccountByUsername(username, new FailablePromise<AresAccount>() {
             @Override
             public void success(AresAccount aresAccount) {
                 if (aresAccount == null) {
@@ -416,7 +413,7 @@ public final class PunishmentHandler {
     public void createBlacklist(CommandSender sender, String username, String reason, SimplePromise promise) {
         final UUID creatorId = (sender instanceof Player) ? ((Player)sender).getUniqueId() : null;
 
-        manager.getPlugin().getCore().getBridgeManager().getDataManager().getAccountByUsername(username, new FailablePromise<AresAccount>() {
+        manager.getPlugin().getCore().getPlayerManager().getAccountByUsername(username, new FailablePromise<AresAccount>() {
             @Override
             public void success(AresAccount aresAccount) {
                 if (aresAccount == null) {

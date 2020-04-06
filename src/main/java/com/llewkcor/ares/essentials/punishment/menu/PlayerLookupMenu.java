@@ -6,7 +6,7 @@ import com.llewkcor.ares.commons.menu.ClickableItem;
 import com.llewkcor.ares.commons.menu.Menu;
 import com.llewkcor.ares.commons.util.general.Time;
 import com.llewkcor.ares.core.alts.data.AltEntry;
-import com.llewkcor.ares.core.bridge.data.account.AresAccount;
+import com.llewkcor.ares.core.player.data.account.AresAccount;
 import com.llewkcor.ares.essentials.punishment.data.Punishment;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;

@@ -2,7 +2,7 @@ package com.llewkcor.ares.essentials.message;
 
 import com.llewkcor.ares.commons.logger.Logger;
 import com.llewkcor.ares.commons.promise.SimplePromise;
-import com.llewkcor.ares.core.bridge.data.account.AresAccount;
+import com.llewkcor.ares.core.player.data.account.AresAccount;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -36,8 +36,8 @@ public final class MessageHandler {
             return;
         }
 
-        final AresAccount senderAccount = manager.getPlugin().getCore().getBridgeManager().getDataManager().getAccountByBukkitID(sender.getUniqueId());
-        final AresAccount receiverAccount = manager.getPlugin().getCore().getBridgeManager().getDataManager().getAccountByBukkitID(receiver.getUniqueId());
+        final AresAccount senderAccount = manager.getPlugin().getCore().getPlayerManager().getAccountByBukkitID(sender.getUniqueId());
+        final AresAccount receiverAccount = manager.getPlugin().getCore().getPlayerManager().getAccountByBukkitID(receiver.getUniqueId());
 
         if (senderAccount == null) {
             promise.fail("Failed to obtain your account");
@@ -96,8 +96,8 @@ public final class MessageHandler {
             return;
         }
 
-        final AresAccount senderAccount = manager.getPlugin().getCore().getBridgeManager().getDataManager().getAccountByBukkitID(sender.getUniqueId());
-        final AresAccount receiverAccount = manager.getPlugin().getCore().getBridgeManager().getDataManager().getAccountByBukkitID(receiver.getUniqueId());
+        final AresAccount senderAccount = manager.getPlugin().getCore().getPlayerManager().getAccountByBukkitID(sender.getUniqueId());
+        final AresAccount receiverAccount = manager.getPlugin().getCore().getPlayerManager().getAccountByBukkitID(receiver.getUniqueId());
 
         if (senderAccount == null) {
             promise.fail("Failed to obtain your account");
