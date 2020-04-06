@@ -4,6 +4,7 @@ import co.aikar.commands.PaperCommandManager;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.llewkcor.ares.core.Ares;
+import com.llewkcor.ares.essentials.broadcast.BroadcastManager;
 import com.llewkcor.ares.essentials.command.*;
 import com.llewkcor.ares.essentials.message.MessageManager;
 import com.llewkcor.ares.essentials.punishment.PunishmentManager;
@@ -29,6 +30,7 @@ public final class Essentials extends JavaPlugin {
     @Getter protected SupportManager supportManager;
     @Getter protected PunishmentManager punishmentManager;
     @Getter protected MessageManager messageManager;
+    @Getter protected BroadcastManager broadcastManager;
 
     @Override
     public void onEnable() {
@@ -41,6 +43,7 @@ public final class Essentials extends JavaPlugin {
         this.supportManager = new SupportManager(this);
         this.punishmentManager = new PunishmentManager(this);
         this.messageManager = new MessageManager(this);
+        this.broadcastManager = new BroadcastManager(this);
 
         commandManager.enableUnstableAPI("help");
 

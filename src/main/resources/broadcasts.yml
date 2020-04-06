@@ -1,0 +1,7 @@
+settings:
+  interval: 30
+  prefix: '&6Tip: &6'
+messages:
+  - 'This is a test message'
+  - 'This is a test message with &ccolor code &6support'
+  - 'This is the last test message'
