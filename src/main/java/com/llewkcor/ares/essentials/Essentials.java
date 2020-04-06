@@ -55,6 +55,7 @@ public final class Essentials extends JavaPlugin {
         commandManager.registerCommand(new SupportCommand(this));
         commandManager.registerCommand(new PunishmentCommand(this));
         commandManager.registerCommand(new MessageCommand(this));
+        commandManager.registerCommand(new IgnoreCommand(this));
 
         warpManager.getHandler().load();
     }
