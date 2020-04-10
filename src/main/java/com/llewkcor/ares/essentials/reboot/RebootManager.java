@@ -29,7 +29,7 @@ public final class RebootManager {
         this.plugin = plugin;
         this.handler = new RebootHandler(this);
         this.defaultRebootTime = config.getInt("server_restart.default_reboot_time");
-        this.rebootCommenceTime = (Time.now() + (config.getInt("server-restart.server_lifespan") * 1000L));
+        this.rebootCommenceTime = Time.now() + (config.getInt("server_restart.server_lifespan") * 1000L);
         this.rebootTime = 0L;
         this.rebootInProgress = false;
         this.ping = new Scheduler(plugin).async(() -> {
