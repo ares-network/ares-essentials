@@ -123,7 +123,7 @@ public final class PunishmentCommand extends BaseCommand {
 
     @CommandAlias("tempmute|tm")
     @Description("Temporarily mute a player")
-    @CommandPermission("essentials.punishment.mute")
+    @CommandPermission("essentials.punishment.tempmute")
     @Syntax("<username> <duration> <reason>")
     public void onTempmute(CommandSender sender, String username, String duration, String description) {
         plugin.getPunishmentManager().getHandler().tempmute(sender, username, duration, description, new SimplePromise() {
