@@ -12,6 +12,7 @@ import com.llewkcor.ares.essentials.punishment.PunishmentManager;
 import com.llewkcor.ares.essentials.reboot.RebootManager;
 import com.llewkcor.ares.essentials.support.SupportManager;
 import com.llewkcor.ares.essentials.vanish.VanishManager;
+import com.llewkcor.ares.essentials.vote.VoteManager;
 import com.llewkcor.ares.essentials.warp.WarpManager;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -34,6 +35,7 @@ public final class Essentials extends JavaPlugin {
     @Getter protected MessageManager messageManager;
     @Getter protected BroadcastManager broadcastManager;
     @Getter protected RebootManager rebootManager;
+    @Getter protected VoteManager voteManager;
 
     @Override
     public void onEnable() {
@@ -48,6 +50,7 @@ public final class Essentials extends JavaPlugin {
         this.messageManager = new MessageManager(this);
         this.broadcastManager = new BroadcastManager(this);
         this.rebootManager = new RebootManager(this);
+        this.voteManager = new VoteManager(this);
 
         // Commands
         commandManager.enableUnstableAPI("help");

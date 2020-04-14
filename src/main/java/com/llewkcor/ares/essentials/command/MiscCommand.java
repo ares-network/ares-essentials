@@ -14,6 +14,18 @@ import org.bukkit.entity.Player;
 public final class MiscCommand extends BaseCommand {
     @Getter public final Essentials plugin;
 
+    @CommandAlias("vote")
+    @Description("Receive the voting links for this server")
+    public void onVote(Player player) {
+        player.sendMessage(ChatColor.RESET + " ");
+        player.sendMessage(Essentials.PRIMARY + "Vote using the following links and receive a " + Essentials.SECONDARY + "Vote Crate");
+
+        for (String link : plugin.getVoteManager().getVoteLinks()) {
+            player.sendMessage(Essentials.SPECIAL + link);
+            player.sendMessage(ChatColor.RESET + " ");
+        }
+    }
+
     @CommandAlias("weather")
     @CommandPermission("essentials.weather")
     @Description("Change the weather for the world you're in")
