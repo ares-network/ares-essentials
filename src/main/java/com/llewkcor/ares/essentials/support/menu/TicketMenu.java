@@ -41,6 +41,7 @@ public final class TicketMenu extends Menu {
     private void update() {
         clear();
 
+        int cursor = 0;
         final int start = page * 52;
         final int end = start + 52;
         final boolean hasNextPage = tickets.size() > end;
@@ -49,7 +50,7 @@ public final class TicketMenu extends Menu {
         tickets.sort(Comparator.comparingLong(ISupport::getCreateTime));
 
         for (int i = start; i < end; i++) {
-            if (tickets.size() <= i) {
+            if (cursor >= 52 || tickets.size() <= i) {
                 break;
             }
 
@@ -75,7 +76,7 @@ public final class TicketMenu extends Menu {
                         .addLore(lore)
                         .build();
 
-                addItem(new ClickableItem(icon, i, click -> {
+                addItem(new ClickableItem(icon, cursor, click -> {
                     final Player dest = Bukkit.getPlayer(ticket.getCreatorUniqueId());
 
                     if (dest == null || !dest.isOnline()) {
@@ -103,7 +104,7 @@ public final class TicketMenu extends Menu {
                         .addLore(lore)
                         .build();
 
-                addItem(new ClickableItem(icon, i, click -> {
+                addItem(new ClickableItem(icon, cursor, click -> {
                     final Player dest = Bukkit.getPlayer(report.getReportedUniqueId());
 
                     if (dest == null || !dest.isOnline()) {
@@ -124,17 +125,23 @@ public final class TicketMenu extends Menu {
                 }));
             }
 
-            if (hasNextPage) {
-                final ItemStack nextPageIcon = new ItemBuilder().setMaterial(Material.EMERALD_BLOCK).setName(ChatColor.GREEN + "Next Page").build();
-                addItem(new ClickableItem(nextPageIcon, 53, click -> setPage(page + 1)));
-                update();
-            }
+            cursor += 1;
+        }
 
-            if (hasPrevPage) {
-                final ItemStack prevPageIcon = new ItemBuilder().setMaterial(Material.REDSTONE_BLOCK).setName(ChatColor.RED + "Previous Page").build();
-                addItem(new ClickableItem(prevPageIcon, 52, click -> setPage(page - 1)));
+        if (hasNextPage) {
+            final ItemStack nextPageIcon = new ItemBuilder().setMaterial(Material.EMERALD_BLOCK).setName(ChatColor.GREEN + "Next Page").build();
+            addItem(new ClickableItem(nextPageIcon, 53, click -> {
+                setPage(page + 1);
                 update();
-            }
+            }));
+        }
+
+        if (hasPrevPage) {
+            final ItemStack prevPageIcon = new ItemBuilder().setMaterial(Material.REDSTONE_BLOCK).setName(ChatColor.RED + "Previous Page").build();
+            addItem(new ClickableItem(prevPageIcon, 52, click -> {
+                setPage(page - 1);
+                update();
+            }));
         }
     }
 }
