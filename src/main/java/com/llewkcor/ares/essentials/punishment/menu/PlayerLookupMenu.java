@@ -4,9 +4,12 @@ import com.google.common.collect.Lists;
 import com.llewkcor.ares.commons.item.ItemBuilder;
 import com.llewkcor.ares.commons.menu.ClickableItem;
 import com.llewkcor.ares.commons.menu.Menu;
+import com.llewkcor.ares.commons.promise.FailablePromise;
+import com.llewkcor.ares.commons.util.general.IPS;
 import com.llewkcor.ares.commons.util.general.Time;
 import com.llewkcor.ares.core.alts.data.AltEntry;
 import com.llewkcor.ares.core.player.data.account.AresAccount;
+import com.llewkcor.ares.essentials.Essentials;
 import com.llewkcor.ares.essentials.punishment.data.Punishment;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
@@ -14,14 +17,13 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 public final class PlayerLookupMenu extends Menu {
-    public PlayerLookupMenu(Plugin plugin, Player player, AresAccount observed, Collection<Punishment> punishments, Collection<AltEntry> altEntries) {
+    public PlayerLookupMenu(Essentials plugin, Player player, AresAccount observed, Collection<Punishment> punishments, Collection<AltEntry> altEntries) {
         super(plugin, player, observed.getUsername(), 1);
 
         final List<String> aboutLore = Lists.newArrayList();
@@ -68,7 +70,25 @@ public final class PlayerLookupMenu extends Menu {
 
         addItem(new ClickableItem(accountHistoryIcon, 2, click -> {
             player.closeInventory();
-            player.sendMessage(ChatColor.DARK_PURPLE + "Found Accounts" + ChatColor.LIGHT_PURPLE + ": " + altEntries.size());
+
+            for (AltEntry entry : altEntries) {
+                plugin.getCore().getPlayerManager().getAccountByBukkitID(entry.getUniqueId(), new FailablePromise<AresAccount>() {
+                    @Override
+                    public void success(AresAccount aresAccount) {
+                        player.sendMessage(ChatColor.DARK_PURPLE + "UUID" + ChatColor.LIGHT_PURPLE + ": " + aresAccount.getBukkitId().toString());
+                        player.sendMessage(ChatColor.DARK_PURPLE + "Username" + ChatColor.LIGHT_PURPLE + ": " + aresAccount.getUsername());
+                        player.sendMessage(ChatColor.DARK_PURPLE + "IP Address" + ChatColor.LIGHT_PURPLE + ": " + IPS.toString(entry.getAddress()));
+                        player.sendMessage(ChatColor.DARK_PURPLE + "First Seen" + ChatColor.LIGHT_PURPLE + ": " + Time.convertToElapsed(Time.now() - entry.getCreate()));
+                        player.sendMessage(ChatColor.DARK_PURPLE + "Last Seen" + ChatColor.LIGHT_PURPLE + ": " + Time.convertToElapsed(Time.now() - entry.getLastSeen()));
+                        player.sendMessage(ChatColor.RESET + " ");
+                    }
+
+                    @Override
+                    public void fail(String s) {
+                        player.sendMessage(ChatColor.RED + "Skipped Alt Entry for " + entry.getUniqueId().toString() + "... Ares Account not found");
+                    }
+                });
+            }
         }));
 
         addItem(new ClickableItem(teleportToIcon, 4, click -> {
