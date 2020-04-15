@@ -96,7 +96,12 @@ public final class PunishmentManager {
      * @return List of Players
      */
     public List<Player> getMatchingPlayers(Player player) {
+        if (player == null || player.getAddress() == null) {
+            return Lists.newArrayList();
+        }
+
         final long address = IPS.toLong(player.getAddress().getAddress().getHostAddress());
+
         return Bukkit.getOnlinePlayers().stream().filter(otherPlayer -> !otherPlayer.getUniqueId().equals(player.getUniqueId()) &&
                 IPS.toLong(otherPlayer.getAddress().getAddress().getHostAddress()) == address).collect(Collectors.toList());
     }
