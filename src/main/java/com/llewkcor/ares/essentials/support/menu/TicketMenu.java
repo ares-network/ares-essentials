@@ -77,6 +77,13 @@ public final class TicketMenu extends Menu {
                         .build();
 
                 addItem(new ClickableItem(icon, cursor, click -> {
+                    if (click.isRightClick()) {
+                        essentials.getSupportManager().getTickets().remove(request);
+                        tickets.remove(request);
+                        update();
+                        return;
+                    }
+
                     final Player dest = Bukkit.getPlayer(ticket.getCreatorUniqueId());
 
                     if (dest == null || !dest.isOnline()) {
@@ -105,6 +112,13 @@ public final class TicketMenu extends Menu {
                         .build();
 
                 addItem(new ClickableItem(icon, cursor, click -> {
+                    if (click.isRightClick()) {
+                        essentials.getSupportManager().getTickets().remove(report);
+                        tickets.remove(report);
+                        update();
+                        return;
+                    }
+
                     final Player dest = Bukkit.getPlayer(report.getReportedUniqueId());
 
                     if (dest == null || !dest.isOnline()) {
