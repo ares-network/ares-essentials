@@ -40,9 +40,8 @@ public final class VanishListener implements Listener {
                 PacketType.Play.Server.REL_ENTITY_MOVE_LOOK, PacketType.Play.Server.ENTITY_LOOK,
                 PacketType.Play.Server.ENTITY_HEAD_ROTATION, PacketType.Play.Server.ENTITY_METADATA,
                 PacketType.Play.Server.ATTACH_ENTITY, PacketType.Play.Server.ENTITY_VELOCITY,
-                PacketType.Play.Server.ENTITY_EQUIPMENT, PacketType.Play.Server.COLLECT,
-                PacketType.Play.Server.ENTITY_TELEPORT, PacketType.Play.Server.ENTITY_EFFECT,
-                PacketType.Play.Server.SPAWN_ENTITY, PacketType.Play.Server.SPAWN_ENTITY_LIVING) {
+                PacketType.Play.Server.ENTITY_EQUIPMENT, PacketType.Play.Server.ENTITY_TELEPORT,
+                PacketType.Play.Server.ENTITY_EFFECT, PacketType.Play.Server.SPAWN_ENTITY, PacketType.Play.Server.SPAWN_ENTITY_LIVING) {
 
             @Override
             public void onPacketSending(PacketEvent event) {
