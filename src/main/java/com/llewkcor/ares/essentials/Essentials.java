@@ -6,6 +6,7 @@ import com.comphenix.protocol.ProtocolManager;
 import com.llewkcor.ares.core.Ares;
 import com.llewkcor.ares.essentials.broadcast.BroadcastManager;
 import com.llewkcor.ares.essentials.command.*;
+import com.llewkcor.ares.essentials.kits.KitManager;
 import com.llewkcor.ares.essentials.listener.CoreHookListener;
 import com.llewkcor.ares.essentials.message.MessageManager;
 import com.llewkcor.ares.essentials.punishment.PunishmentManager;
@@ -38,6 +39,7 @@ public final class Essentials extends JavaPlugin {
     @Getter protected RebootManager rebootManager;
     @Getter protected VoteManager voteManager;
     @Getter protected StaffManager staffManager;
+    @Getter protected KitManager kitManager;
 
     @Override
     public void onEnable() {
@@ -54,6 +56,7 @@ public final class Essentials extends JavaPlugin {
         this.rebootManager = new RebootManager(this);
         this.voteManager = new VoteManager(this);
         this.staffManager = new StaffManager(this);
+        this.kitManager = new KitManager(this);
 
         // Commands
         commandManager.enableUnstableAPI("help");
@@ -71,11 +74,14 @@ public final class Essentials extends JavaPlugin {
         commandManager.registerCommand(new MessageCommand(this));
         commandManager.registerCommand(new IgnoreCommand(this));
         commandManager.registerCommand(new StaffCommand(this));
+        commandManager.registerCommand(new KitCommand(this));
 
         // Listeners
         Bukkit.getPluginManager().registerEvents(new CoreHookListener(this), this);
 
+        // Load Data
         warpManager.getHandler().load();
+        kitManager.getHandler().load();
     }
 
     @Override
