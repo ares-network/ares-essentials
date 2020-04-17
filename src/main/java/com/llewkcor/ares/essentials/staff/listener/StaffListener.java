@@ -79,7 +79,7 @@ public final class StaffListener implements Listener {
             final Player staff = Bukkit.getPlayer(staffAccount.getUniqueId());
 
             if (staff != null && staff.isOnline()) {
-                staff.sendMessage(ChatColor.GRAY + player.getName() + " disconnected " + ChatColor.WHITE + "(" + ChatColor.AQUA + Bukkit.getOnlinePlayers().size() + " online" + ChatColor.WHITE + ")");
+                staff.sendMessage(ChatColor.GRAY + player.getName() + " disconnected " + ChatColor.WHITE + "(" + ChatColor.AQUA + (Bukkit.getOnlinePlayers().size() - 1) + " online" + ChatColor.WHITE + ")");
             }
         });
 
