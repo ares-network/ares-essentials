@@ -151,8 +151,8 @@ public final class KitHandler {
     public void delete(String kitName, SimplePromise promise) {
         final Kit kit = manager.getKit(kitName);
 
-        if (kit != null) {
-            promise.fail("Kit name is already in use");
+        if (kit == null) {
+            promise.fail("Kit not found");
             return;
         }
 
