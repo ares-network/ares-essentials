@@ -13,6 +13,7 @@ import com.llewkcor.ares.essentials.vanish.menu.ChestMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
@@ -235,7 +236,7 @@ public final class VanishListener implements Listener {
             return;
         }
 
-        if (block == null || !block.getType().name().contains("CHEST")) {
+        if (block == null || !(block.getType().equals(Material.CHEST) || block.getType().equals(Material.TRAPPED_CHEST))) {
             return;
         }
 
