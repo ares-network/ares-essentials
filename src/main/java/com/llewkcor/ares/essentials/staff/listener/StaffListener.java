@@ -2,6 +2,8 @@ package com.llewkcor.ares.essentials.staff.listener;
 
 import com.llewkcor.ares.commons.event.PlayerBigMoveEvent;
 import com.llewkcor.ares.commons.event.ProcessedChatEvent;
+import com.llewkcor.ares.commons.logger.Logger;
+import com.llewkcor.ares.commons.util.bukkit.Scheduler;
 import com.llewkcor.ares.essentials.staff.StaffManager;
 import com.llewkcor.ares.essentials.staff.data.StaffAccount;
 import com.llewkcor.ares.essentials.staff.data.StaffDAO;
@@ -65,6 +67,15 @@ public final class StaffListener implements Listener {
 
             if (account.isEnabled(StaffAccount.StaffSetting.JOIN_VANISHED)) {
                 manager.getPlugin().getVanishManager().getHandler().hidePlayer(player);
+            }
+        } else {
+            // Removing the existing Staff Account for a player that no longer has the permission
+            final StaffAccount account = manager.getAccountByID(player.getUniqueId());
+
+            if (account != null) {
+                manager.getStaffRepository().remove(account);
+                new Scheduler(manager.getPlugin()).async(() -> StaffDAO.deleteAccount(manager.getPlugin().getCore().getDatabaseInstance(), account)).run();
+                Logger.warn("Deleted Staff Account for " + player.getName() + " because they no longer have the Staff Permission");
             }
         }
     }

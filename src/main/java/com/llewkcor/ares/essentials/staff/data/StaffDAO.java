@@ -55,4 +55,20 @@ public final class StaffDAO {
             collection.insertOne(account.toDocument());
         }
     }
+
+    /**
+     * Handles deleting a Staff Account from the database
+     * @param database Database
+     * @param account StaffAccount
+     */
+    public static void deleteAccount(MongoDB database, StaffAccount account) {
+        final MongoCollection<Document> collection = database.getCollection(NAME, COLL);
+        final Document existing = collection.find(Filters.eq("id", account.getUniqueId())).first();
+
+        if (existing == null) {
+            return;
+        }
+
+        collection.deleteOne(existing);
+    }
 }
