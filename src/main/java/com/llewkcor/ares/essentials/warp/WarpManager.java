@@ -3,7 +3,9 @@ package com.llewkcor.ares.essentials.warp;
 import com.google.common.collect.Sets;
 import com.llewkcor.ares.essentials.Essentials;
 import com.llewkcor.ares.essentials.warp.data.Warp;
+import com.llewkcor.ares.essentials.warp.listener.WarpSignListener;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 
 import java.util.Set;
 
@@ -16,6 +18,8 @@ public final class WarpManager {
         this.plugin = plugin;
         this.handler = new WarpHandler(this);
         this.warps = Sets.newHashSet();
+
+        Bukkit.getPluginManager().registerEvents(new WarpSignListener(this), plugin);
     }
 
     /**
