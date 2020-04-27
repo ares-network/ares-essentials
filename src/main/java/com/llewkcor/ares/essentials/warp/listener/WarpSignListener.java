@@ -68,7 +68,7 @@ public final class WarpSignListener implements Listener {
         final String[] lines = sign.getLines();
         final String l1 = lines[0], warpName = lines[1];
 
-        if (!l1.equals(ChatColor.BLUE + "[Load Kit]")) {
+        if (!l1.equals(ChatColor.BLUE + "[Warp]")) {
             return;
         }
 
