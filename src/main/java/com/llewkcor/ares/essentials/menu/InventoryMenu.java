@@ -86,20 +86,15 @@ public final class InventoryMenu extends Menu {
             }));
         }
 
-        for (int i = 45; i < observed.getInventory().getArmorContents().length; i++) {
-            final ItemStack item = observed.getInventory().getArmorContents()[i];
-
+        int cursor = 45;
+        for (ItemStack item : observed.getInventory().getArmorContents()) {
             if (item == null || item.getType().equals(Material.AIR)) {
                 continue;
             }
 
-            addItem(new ClickableItem(item, i, click -> {
-                observed.getInventory().removeItem(item);
-                player.getInventory().addItem(item);
+            addItem(new ClickableItem(item, cursor, click -> player.sendMessage(ChatColor.RED + "You can not transfer player armor")));
 
-                observed.sendMessage(Essentials.SECONDARY + player.getName() + Essentials.PRIMARY + " transferred an item from your inventory to theirs");
-                player.sendMessage(Essentials.SECONDARY + observed.getName() + Essentials.PRIMARY + "'s item has been transferred to your inventory");
-            }));
+            cursor += 1;
         }
 
         addItem(new ClickableItem(health, 51, click -> {}));
