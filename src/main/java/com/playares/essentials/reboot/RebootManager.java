@@ -1,14 +1,12 @@
 package com.playares.essentials.reboot;
 
 import com.playares.commons.util.bukkit.Scheduler;
-import com.playares.commons.util.general.Configs;
 import com.playares.commons.util.general.Time;
 import com.playares.essentials.EssentialsService;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.scheduler.BukkitTask;
 
 public final class RebootManager {
@@ -24,12 +22,10 @@ public final class RebootManager {
     @Getter @Setter public BukkitTask ping;
 
     public RebootManager(EssentialsService essentials) {
-        final YamlConfiguration config = Configs.getConfig(essentials.getOwner(), "essentials");
-
         this.essentials = essentials;
         this.handler = new RebootHandler(this);
-        this.defaultRebootTime = config.getInt("server_restart.default_reboot_time");
-        this.rebootCommenceTime = Time.now() + (config.getInt("server_restart.server_lifespan") * 1000L);
+        this.defaultRebootTime = essentials.getConfiguration().getInt("server_restart.default_reboot_time");
+        this.rebootCommenceTime = Time.now() + (essentials.getConfiguration().getInt("server_restart.server_lifespan") * 1000L);
         this.rebootTime = 0L;
         this.rebootInProgress = false;
         this.ping = new Scheduler(essentials.getOwner()).async(() -> {
