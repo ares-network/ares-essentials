@@ -4,6 +4,12 @@ import java.util.UUID;
 
 public interface ISupport {
     /**
+     * Returns the UUID of this ticket
+     * @return UUID
+     */
+    UUID getTicketId();
+
+    /**
      * Returns the UUID of the creator
      * @return UUID
      */

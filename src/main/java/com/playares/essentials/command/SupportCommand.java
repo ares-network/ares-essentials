@@ -56,7 +56,7 @@ public final class SupportCommand extends BaseCommand {
     @Description("View all open reports")
     @CommandPermission("essentials.report.view")
     public void onViewReports(Player player) {
-        plugin.getSupportManager().getHandler().openTicketMenu(player, plugin.getSupportManager().getReports(), new SimplePromise() {
+        plugin.getSupportManager().getReports(reports -> plugin.getSupportManager().getHandler().openTicketMenu(player, reports, new SimplePromise() {
             @Override
             public void success() {}
 
@@ -64,14 +64,14 @@ public final class SupportCommand extends BaseCommand {
             public void fail(String s) {
                 player.sendMessage(ChatColor.RED + s);
             }
-        });
+        }));
     }
 
     @CommandAlias("requests")
     @Description("View all open requests")
     @CommandPermission("essentials.request.view")
     public void onViewRequest(Player player) {
-        plugin.getSupportManager().getHandler().openTicketMenu(player, plugin.getSupportManager().getRequests(), new SimplePromise() {
+        plugin.getSupportManager().getRequests(requests -> plugin.getSupportManager().getHandler().openTicketMenu(player, requests, new SimplePromise() {
             @Override
             public void success() {}
 
@@ -79,7 +79,7 @@ public final class SupportCommand extends BaseCommand {
             public void fail(String s) {
                 player.sendMessage(ChatColor.RED + s);
             }
-        });
+        }));
     }
 
     @HelpCommand

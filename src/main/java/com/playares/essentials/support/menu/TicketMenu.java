@@ -1,6 +1,7 @@
 package com.playares.essentials.support.menu;
 
 import com.google.common.collect.Lists;
+import com.playares.commons.util.bukkit.Scheduler;
 import com.playares.essentials.EssentialsService;
 import com.playares.essentials.support.data.ISupport;
 import com.playares.essentials.support.data.Report;
@@ -8,6 +9,7 @@ import com.playares.essentials.support.data.Request;
 import com.playares.commons.item.ItemBuilder;
 import com.playares.commons.menu.ClickableItem;
 import com.playares.commons.menu.Menu;
+import com.playares.essentials.support.data.SupportDAO;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -78,9 +80,15 @@ public final class TicketMenu extends Menu {
 
                 addItem(new ClickableItem(icon, cursor, click -> {
                     if (click.isRightClick()) {
-                        essentials.getSupportManager().getTickets().remove(request);
-                        tickets.remove(request);
-                        update();
+                        new Scheduler(essentials.getOwner()).async(() -> {
+                            SupportDAO.deleteTicket(essentials, request);
+
+                            new Scheduler(essentials.getOwner()).sync(() -> {
+                                tickets.remove(request);
+                                update();
+                            }).run();
+                        }).run();
+
                         return;
                     }
 
@@ -113,9 +121,15 @@ public final class TicketMenu extends Menu {
 
                 addItem(new ClickableItem(icon, cursor, click -> {
                     if (click.isRightClick()) {
-                        essentials.getSupportManager().getTickets().remove(report);
-                        tickets.remove(report);
-                        update();
+                        new Scheduler(essentials.getOwner()).async(() -> {
+                            SupportDAO.deleteTicket(essentials, report);
+
+                            new Scheduler(essentials.getOwner()).sync(() -> {
+                                tickets.remove(report);
+                                update();
+                            }).run();
+                        }).run();
+
                         return;
                     }
 

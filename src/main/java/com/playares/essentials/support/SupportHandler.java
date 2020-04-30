@@ -4,6 +4,7 @@ import com.playares.essentials.staff.data.StaffAccount;
 import com.playares.essentials.support.data.ISupport;
 import com.playares.essentials.support.data.Report;
 import com.playares.essentials.support.data.Request;
+import com.playares.essentials.support.data.SupportDAO;
 import com.playares.essentials.support.menu.TicketMenu;
 import com.playares.commons.promise.SimplePromise;
 import com.playares.commons.util.bukkit.Players;
@@ -17,6 +18,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
+import java.util.UUID;
 
 @AllArgsConstructor
 public final class SupportHandler {
@@ -40,29 +42,34 @@ public final class SupportHandler {
             return;
         }
 
-        final Report report = new Report(player.getUniqueId(), player.getName(), Time.now(), description, reported.getUniqueId(), reported.getName());
-        manager.getTickets().add(report);
+        final Report report = new Report(UUID.randomUUID(), player.getUniqueId(), player.getName(), Time.now(), description, reported.getUniqueId(), reported.getName());
 
-        for (StaffAccount onlineStaff : manager.getEssentials().getStaffManager().getAccountByPermission(StaffAccount.StaffSetting.SHOW_TICKET_NOTIFICATIONS, true)) {
-            final Player onlineStaffPlayer = Bukkit.getPlayer(onlineStaff.getUniqueId());
+        new Scheduler(manager.getEssentials().getOwner()).async(() -> {
 
-            if (onlineStaffPlayer == null || !onlineStaffPlayer.isOnline()) {
-                continue;
-            }
+            SupportDAO.setTicket(manager.getEssentials(), report);
 
-            onlineStaffPlayer.sendMessage(ChatColor.DARK_RED + "[" + ChatColor.RED + "Report" + ChatColor.DARK_RED + "] " + ChatColor.RED + player.getName() + ChatColor.GRAY + " reported " + ChatColor.RED + reported.getName() + ChatColor.GRAY + " for: " + ChatColor.AQUA + description);
-            Players.playSound(onlineStaffPlayer, Sound.NOTE_PIANO);
-        }
+            new Scheduler(manager.getEssentials().getOwner()).sync(() -> {
 
-        Bukkit.getOnlinePlayers().stream().filter(online -> online.hasPermission("essentials.report.view")).forEach(staff -> {
+                for (StaffAccount onlineStaff : manager.getEssentials().getStaffManager().getAccountByPermission(StaffAccount.StaffSetting.SHOW_TICKET_NOTIFICATIONS, true)) {
+                    final Player onlineStaffPlayer = Bukkit.getPlayer(onlineStaff.getUniqueId());
 
-        });
+                    if (onlineStaffPlayer == null || !onlineStaffPlayer.isOnline()) {
+                        continue;
+                    }
 
-        manager.getTicketCooldowns().add(player.getUniqueId());
+                    onlineStaffPlayer.sendMessage(ChatColor.DARK_RED + "[" + ChatColor.RED + "Report" + ChatColor.DARK_RED + "] " + ChatColor.RED + player.getName() + ChatColor.GRAY + " reported " + ChatColor.RED + reported.getName() + ChatColor.GRAY + " for: " + ChatColor.AQUA + description);
+                    Players.playSound(onlineStaffPlayer, Sound.NOTE_PIANO);
+                }
 
-        new Scheduler(manager.getEssentials().getOwner()).sync(() -> manager.getTicketCooldowns().remove(player.getUniqueId())).delay(30 * 20).run();
+                manager.getTicketCooldowns().add(player.getUniqueId());
 
-        promise.success();
+                new Scheduler(manager.getEssentials().getOwner()).sync(() -> manager.getTicketCooldowns().remove(player.getUniqueId())).delay(30 * 20).run();
+
+                promise.success();
+
+            }).run();
+
+        }).run();
     }
 
     /**
@@ -77,25 +84,34 @@ public final class SupportHandler {
             return;
         }
 
-        final Request request = new Request(player.getUniqueId(), player.getName(), Time.now(), description);
-        manager.getTickets().add(request);
+        final Request request = new Request(UUID.randomUUID(), player.getUniqueId(), player.getName(), Time.now(), description);
 
-        for (StaffAccount onlineStaff : manager.getEssentials().getStaffManager().getAccountByPermission(StaffAccount.StaffSetting.SHOW_TICKET_NOTIFICATIONS, true)) {
-            final Player onlineStaffPlayer = Bukkit.getPlayer(onlineStaff.getUniqueId());
+        new Scheduler(manager.getEssentials().getOwner()).async(() -> {
 
-            if (onlineStaffPlayer == null || !onlineStaffPlayer.isOnline()) {
-                continue;
-            }
+            SupportDAO.setTicket(manager.getEssentials(), request);
 
-            onlineStaffPlayer.sendMessage(ChatColor.DARK_AQUA + "[" + ChatColor.AQUA + "Request" + ChatColor.DARK_AQUA + "] " + ChatColor.AQUA + player.getName() + ChatColor.GRAY + " requested: " + ChatColor.YELLOW + description);
-            Players.playSound(onlineStaffPlayer, Sound.NOTE_PIANO);
-        }
+            new Scheduler(manager.getEssentials().getOwner()).sync(() -> {
 
-        manager.getTicketCooldowns().add(player.getUniqueId());
+                for (StaffAccount onlineStaff : manager.getEssentials().getStaffManager().getAccountByPermission(StaffAccount.StaffSetting.SHOW_TICKET_NOTIFICATIONS, true)) {
+                    final Player onlineStaffPlayer = Bukkit.getPlayer(onlineStaff.getUniqueId());
 
-        new Scheduler(manager.getEssentials().getOwner()).sync(() -> manager.getTicketCooldowns().remove(player.getUniqueId())).delay(30 * 20).run();
+                    if (onlineStaffPlayer == null || !onlineStaffPlayer.isOnline()) {
+                        continue;
+                    }
 
-        promise.success();
+                    onlineStaffPlayer.sendMessage(ChatColor.DARK_AQUA + "[" + ChatColor.AQUA + "Request" + ChatColor.DARK_AQUA + "] " + ChatColor.AQUA + player.getName() + ChatColor.GRAY + " requested: " + ChatColor.YELLOW + description);
+                    Players.playSound(onlineStaffPlayer, Sound.NOTE_PIANO);
+                }
+
+                manager.getTicketCooldowns().add(player.getUniqueId());
+
+                new Scheduler(manager.getEssentials().getOwner()).sync(() -> manager.getTicketCooldowns().remove(player.getUniqueId())).delay(30 * 20).run();
+
+                promise.success();
+
+            }).run();
+
+        }).run();
     }
 
     /**
