@@ -24,6 +24,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.List;
@@ -253,5 +254,20 @@ public final class VanishListener implements Listener {
         event.setCancelled(true);
 
         player.sendMessage(ChatColor.DARK_AQUA + "Silently opening chest...");
+    }
+
+    @EventHandler
+    public void onPickupItem(PlayerPickupItemEvent event) {
+        final Player player = event.getPlayer();
+
+        if (event.isCancelled()) {
+            return;
+        }
+
+        if (!manager.isVanished(player)) {
+            return;
+        }
+
+        event.setCancelled(true);
     }
 }
