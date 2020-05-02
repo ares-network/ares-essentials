@@ -3,7 +3,6 @@ package com.playares.essentials.staff.listener;
 import com.playares.essentials.staff.StaffManager;
 import com.playares.essentials.staff.data.StaffAccount;
 import com.mongodb.client.model.Filters;
-import com.playares.commons.event.PlayerBigMoveEvent;
 import com.playares.commons.event.ProcessedChatEvent;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -93,25 +92,6 @@ public final class StaffListener implements Listener {
         if (account != null) {
             manager.setAccount(false, account);
             manager.getStaffRepository().remove(account);
-        }
-    }
-
-    @EventHandler
-    public void onPlayerMove(PlayerBigMoveEvent event) {
-        final Player player = event.getPlayer();
-        final StaffAccount account = manager.getAccountByID(player.getUniqueId());
-
-        if (account != null && !account.isVerified()) {
-            event.setCancelled(true);
-            player.teleport(event.getFrom());
-
-            // Account exists, isn't verified and doesn't have a password
-            if (account.getPassword() == null) {
-                player.sendMessage(ChatColor.GRAY + "Before you begin as a Staff member type " + ChatColor.AQUA + "/staff login <password>" + ChatColor.GRAY + " to set your 2FA password");
-                return;
-            }
-
-            player.sendMessage(ChatColor.GRAY + "Please enter your 2FA login with " + ChatColor.AQUA + "/staff login <password>");
         }
     }
 
