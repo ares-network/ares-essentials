@@ -22,13 +22,12 @@ import java.util.List;
 
 public final class InventoryMenu extends Menu {
     @Getter public final Player observed;
-    @Getter public Scheduler updateScheduler;
     @Getter public BukkitTask updateTask;
 
     public InventoryMenu(Plugin plugin, Player player, Player observed) {
         super(plugin, player, observed.getName(), 6);
         this.observed = observed;
-        this.updateScheduler = new Scheduler(plugin).sync(this::update).repeat(0L, 10L);
+        this.updateTask = new Scheduler(plugin).sync(this::update).repeat(0L, 5L).run();
     }
 
     private void update() {
@@ -37,7 +36,6 @@ public final class InventoryMenu extends Menu {
         if (observed.isDead() || !observed.isOnline()) {
             updateTask.cancel();
             this.updateTask = null;
-            this.updateScheduler = null;
 
             player.closeInventory();
             player.sendMessage(ChatColor.RED + observed.getName() + " is no longer available");
@@ -105,16 +103,13 @@ public final class InventoryMenu extends Menu {
     @Override
     public void open() {
         super.open();
-        this.updateTask = this.updateScheduler.run();
     }
 
     @Override
     public void onInventoryClose(InventoryCloseEvent event) {
         super.onInventoryClose(event);
 
-        updateTask.cancel();
-
-        this.updateScheduler = null;
+        this.updateTask.cancel();
         this.updateTask = null;
     }
 }
