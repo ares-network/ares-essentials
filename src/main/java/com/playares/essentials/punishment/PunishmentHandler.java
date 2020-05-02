@@ -179,7 +179,6 @@ public final class PunishmentHandler {
             }
 
             new Scheduler(manager.getEssentials().getOwner()).async(() -> {
-
                 final Collection<Punishment> activeBans = manager.getActivePunishments(aresAccount.getUniqueId(), aresAccount.getAddress(), PunishmentType.BAN);
 
                 new Scheduler(manager.getEssentials().getOwner()).sync(() -> {
@@ -188,10 +187,10 @@ public final class PunishmentHandler {
                         return;
                     }
 
-                    new Scheduler(manager.getEssentials().getOwner()).async(() -> activeBans.forEach(activeBan -> {
+                    activeBans.forEach(activeBan -> {
                         activeBan.setAppealed(true);
                         manager.setPunishment(false, activeBan);
-                    })).run();
+                    });
 
                     Bukkit.getOnlinePlayers().stream().filter(player -> player.hasPermission("essentials.punishment.view")).forEach(staff ->
                             staff.sendMessage(ChatColor.LIGHT_PURPLE + sender.getName() + " unbanned " + aresAccount.getUsername()));
@@ -199,7 +198,6 @@ public final class PunishmentHandler {
                     Logger.print(sender.getName() + " unbanned " + aresAccount.getUsername() + " (" + aresAccount.getUniqueId().toString() + ")");
                     promise.success();
                 }).run();
-
             }).run();
         });
     }
