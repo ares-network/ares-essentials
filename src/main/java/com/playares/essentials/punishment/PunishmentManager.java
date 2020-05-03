@@ -47,9 +47,9 @@ public final class PunishmentManager {
         final MongoDB database = (MongoDB)essentials.getOwner().getDatabaseInstance(MongoDB.class);
         final MongoCollection<Document> collection = database.getCollection(essentials.getDatabaseName(), "punishments");
         final MongoCursor<Document> cursor = collection.find(Filters.and(
-                    Filters.or(Filters.eq("punished", uniqueId), Filters.eq("address", address)),
+                    Filters.or(Filters.eq("punished_id", uniqueId), Filters.eq("punished_address", address)),
 
-                    Filters.and(Filters.or(Filters.eq("expire", 0L), Filters.gt("expire", Time.now())),
+                    Filters.and(Filters.or(Filters.eq("forever", true), Filters.gt("expire_date", Time.now())),
                             Filters.eq("appealed", false))
                 )
         ).cursor();
@@ -111,7 +111,7 @@ public final class PunishmentManager {
             final MongoCollection<Document> collection = database.getCollection(essentials.getDatabaseName(), "punishments");
 
             for (Punishment punishment : punishments) {
-                final Document existing = collection.find(Filters.eq("id")).first();
+                final Document existing = collection.find(Filters.eq("id", punishment.getUniqueId())).first();
 
                 if (existing == null) {
                     collection.insertOne(punishment.toDocument());
