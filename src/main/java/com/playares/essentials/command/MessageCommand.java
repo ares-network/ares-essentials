@@ -2,6 +2,7 @@ package com.playares.essentials.command;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
+import co.aikar.commands.annotation.CommandCompletion;
 import co.aikar.commands.annotation.Description;
 import co.aikar.commands.annotation.Syntax;
 import com.playares.commons.promise.SimplePromise;
@@ -18,6 +19,7 @@ public final class MessageCommand extends BaseCommand {
     @CommandAlias("message|msg|tell")
     @Description("Send a player a private message")
     @Syntax("<username> <message>")
+    @CommandCompletion("@players")
     public void onMessage(Player player, String username, String message) {
         plugin.getMessageManager().getHandler().sendMessage(player, username, message, new SimplePromise() {
             @Override
