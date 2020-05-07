@@ -50,6 +50,7 @@ public final class PlayerCommand extends BaseCommand {
 
         player.getInventory().clear();
         player.getInventory().setArmorContents(null);
+        sender.sendMessage(EssentialsService.PRIMARY + "Cleared " + EssentialsService.SECONDARY + player.getName() + EssentialsService.PRIMARY + "'s inventory");
         player.sendMessage(EssentialsService.PRIMARY + "Your inventory has been cleared by " + EssentialsService.SECONDARY + sender.getName());
 
         Logger.print(sender.getName() + " cleared " + player.getName() + "'s inventory");
@@ -93,6 +94,7 @@ public final class PlayerCommand extends BaseCommand {
         player.setSaturation(20);
         player.setExhaustion(0);
         player.getActivePotionEffects().forEach(effect -> player.removePotionEffect(effect.getType()));
+        sender.sendMessage(EssentialsService.PRIMARY + "Healed " + EssentialsService.SECONDARY + player.getName());
         player.sendMessage(EssentialsService.PRIMARY + "You have been healed by " + EssentialsService.SECONDARY + sender.getName());
 
         Logger.print(sender.getName() + " healed " + player.getName());
@@ -142,6 +144,7 @@ public final class PlayerCommand extends BaseCommand {
         }
 
         player.setGameMode(gamemode);
+        sender.sendMessage(EssentialsService.PRIMARY + "Updated " + EssentialsService.SECONDARY + player.getName() + EssentialsService.PRIMARY + "'s gamemode to " + EssentialsService.SECONDARY + StringUtils.capitalize(gamemode.name().toLowerCase()));
         player.sendMessage(EssentialsService.PRIMARY + "Your gamemode has been changed to " + EssentialsService.SECONDARY + StringUtils.capitalize(gamemode.name().toLowerCase()));
 
         Logger.print(sender.getName() + " changed " + player.getName() + "'s gamemode to " + gamemode.name());
