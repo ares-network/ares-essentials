@@ -54,6 +54,7 @@ public final class TeleportCommand extends BaseCommand {
 
         from.teleport(to.getLocation());
         from.sendMessage(EssentialsService.PRIMARY + "You have been teleported to " + EssentialsService.SECONDARY + to.getName());
+        to.sendMessage(EssentialsService.SECONDARY + from.getName() + EssentialsService.PRIMARY + " has been summoned to your location");
         Logger.print(sender.getName() + " teleported " + from.getName() + " to " + to.getName());
     }
 
@@ -86,6 +87,7 @@ public final class TeleportCommand extends BaseCommand {
 
     @CommandAlias("world")
     @Description("Change worlds")
+    @Syntax("<world>")
     @CommandPermission("essentials.tp")
     public void onWorld(Player player, String worldName) {
         final World world = Bukkit.getWorld(worldName);
