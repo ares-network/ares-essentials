@@ -61,6 +61,8 @@ public final class PunishmentManager {
             result.add(new Punishment().fromDocument(document));
         }
 
+        cursor.close();
+
         return ImmutableList.copyOf(result);
     }
 

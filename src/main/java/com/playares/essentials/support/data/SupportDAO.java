@@ -32,6 +32,8 @@ public final class SupportDAO {
             }
         }
 
+        cursor.close();
+
         return ImmutableList.copyOf(result);
     }
 
@@ -54,6 +56,8 @@ public final class SupportDAO {
                 result.add(request);
             }
         }
+
+        cursor.close();
 
         return ImmutableList.copyOf(result);
     }
