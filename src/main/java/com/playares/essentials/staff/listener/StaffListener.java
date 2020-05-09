@@ -112,29 +112,4 @@ public final class StaffListener implements Listener {
             player.sendMessage(ChatColor.GRAY + "Please enter your 2FA login with " + ChatColor.AQUA + "/staff login <password>");
         }
     }
-
-    @EventHandler (priority = EventPriority.MONITOR)
-    public void onProcessedChat(ProcessedChatEvent event) {
-        final Player player = event.getPlayer();
-        final StaffAccount account = manager.getAccountByID(player.getUniqueId());
-
-        if (account != null) {
-            // Overrides chat ranges to create a broadcasted message
-            if (account.isEnabled(StaffAccount.StaffSetting.ALL_MESSAGES_BROADCAST)) {
-                event.getRecipients().clear();
-                event.getRecipients().addAll(Bukkit.getOnlinePlayers());
-            }
-        }
-
-        // Overrides chat ranges to receive all messages
-        for (StaffAccount onlineStaff : manager.getAccountByPermission(StaffAccount.StaffSetting.SHOW_GLOBAL_CHAT, true)) {
-            final Player onlineStaffPlayer = Bukkit.getPlayer(onlineStaff.getUniqueId());
-
-            if (onlineStaffPlayer == null || !onlineStaffPlayer.isOnline()) {
-                continue;
-            }
-
-            event.getRecipients().add(onlineStaffPlayer);
-        }
-    }
 }
