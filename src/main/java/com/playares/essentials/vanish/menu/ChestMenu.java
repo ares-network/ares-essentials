@@ -7,7 +7,6 @@ import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
@@ -21,7 +20,7 @@ public final class ChestMenu extends Menu {
     public ChestMenu(Plugin plugin, Player player, Inventory inventory) {
         super(plugin, player, inventory.getName(), inventory.getSize() / 9);
         this.inventory = inventory;
-        this.updateScheduler = new Scheduler(plugin).sync(() -> update()).repeat(0L, 10L);
+        this.updateScheduler = new Scheduler(plugin).sync(this::update).repeat(0L, 10L);
     }
 
     private void update() {
@@ -30,6 +29,11 @@ public final class ChestMenu extends Menu {
         if (inventory == null) {
             player.closeInventory();
             player.sendMessage(ChatColor.RED + "Inventory no longer exists");
+            updateTask.cancel();
+
+            updateTask = null;
+            updateScheduler = null;
+            return;
         }
 
         for (int i = 0; i < inventory.getSize(); i++) {
@@ -49,14 +53,6 @@ public final class ChestMenu extends Menu {
     @Override
     public void open() {
         super.open();
-        this.updateTask = updateScheduler.run();
-    }
-
-    @Override
-    public void onInventoryClose(InventoryCloseEvent event) {
-        super.onInventoryClose(event);
-        this.updateTask.cancel();
-        this.updateTask = null;
-        this.updateScheduler = null;
+        addUpdater(this::update, 5L);
     }
 }

@@ -27,7 +27,6 @@ public final class InventoryMenu extends Menu {
     public InventoryMenu(Plugin plugin, Player player, Player observed) {
         super(plugin, player, observed.getName(), 6);
         this.observed = observed;
-        this.updateTask = new Scheduler(plugin).sync(this::update).repeat(0L, 5L).run();
     }
 
     private void update() {
@@ -103,13 +102,6 @@ public final class InventoryMenu extends Menu {
     @Override
     public void open() {
         super.open();
-    }
-
-    @Override
-    public void onInventoryClose(InventoryCloseEvent event) {
-        super.onInventoryClose(event);
-
-        this.updateTask.cancel();
-        this.updateTask = null;
+        addUpdater(this::update, 5L);
     }
 }
